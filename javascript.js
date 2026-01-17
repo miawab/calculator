@@ -2,9 +2,7 @@ let text = "";
 let x = "";
 let y = "";
 let op;
-let textArray = [];
-let xArray = [];
-let yArray = [];
+let operators = ["x","÷","-","+"];
 const Btns = document.querySelectorAll("button");
 
 Btns.forEach((btn)=>{
@@ -14,9 +12,12 @@ Btns.forEach((btn)=>{
     }
 });
 
+
 const content = document.querySelector("#content");
 const mainBtns = document.querySelector("#mainBtns");
 const topBtns = document.querySelector("#topBtns");
+
+//functions
 
 function displayContent(text){
     if(text.length > 14){
@@ -45,30 +46,41 @@ function calculate(op,x,y){
     }
 }
 
+function showResult(){
+    x = Number(calculate(op,x,y))
+    x = (x>999999999999?`${(x.toPrecision(9))}`:`${Number(x.toPrecision(12))}`)
+    y = "";
+    text = `${x}`;
+    displayContent(text);
+}
+
+function canInsertDecimal(target){
+    if((target.id == ".") && ((x.includes(".")) && y =="") ||  y.includes(".")){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+
+// main
+
 mainBtns.addEventListener("click",(e)=>{
     let target = e.target;
-    if(target.id == "x"|| target.id == "÷"|| target.id == "-"|| target.id == "+"){
-        if(["x","÷","-","+"].some(item=> textArray.includes(item))){
-            x = Number(calculate(op,x,y))
-            x = (x>999999999999?`${(x.toPrecision(9))}`:`${Number(x.toPrecision(12))}`)
-            y = "";
-            text = `${x}`;
-            textArray = text.split("");
-            displayContent(text); 
+    if(operators.some(item => item == target.id)){
+        if(operators.some(item=> text.includes(item))){
+            showResult()
         }
         op = target.id;
     }
-    xArray = x.split("");
-    yArray = y.split("");
-    if(target.id != "mainBtns" && target.id != "=" && (!(target.id == "." && (xArray.includes(".")) && y =="") && !(target.id == "." && yArray.includes(".")))){
+    if(target.id != "mainBtns" && target.id != "=" && canInsertDecimal(target)){
         text += target.id;
-        textArray = text.split("");
-        if((textArray.includes(op) && (target.id != op && target.id != "="))){
+        if((text.includes(op) && target.id != op)){
             y += target.id;
             console.log("y")
             console.log(y)
         }
-        else if(target.id!= op && target.id != "="){
+        else if(target.id!= op){
             x += target.id
             console.log("x")
             console.log(x)
@@ -76,21 +88,14 @@ mainBtns.addEventListener("click",(e)=>{
         displayContent(text);
     }
     if((target.id == "=" && y != "")){
-        x = Number(calculate(op,x,y))
-        x = (x>999999999999?`${(x.toPrecision(9))}`:`${Number(x.toPrecision(12))}`)
-        y = "";
-        text = `${x}`;
-        textArray = text.split("");
-        displayContent(text);
+        showResult()
     }
 });
 
 topBtns.addEventListener("click",(e)=>{
     let target = e.target;
     if(target.id == "back"){  
-        xArray = x.split("");
-        yArray = y.split("");
-        if((textArray.includes(op))){
+        if((text.includes(op))){
             y = y.slice(0, -1);
             console.log("y")
             console.log(y)
@@ -101,7 +106,6 @@ topBtns.addEventListener("click",(e)=>{
             console.log(x)
         }  
         text = `${text.slice(0,text.length-1)}`;
-        textArray = text.split("");
         displayContent(text);
     }
     if(target.id == "AC"){
