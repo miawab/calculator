@@ -55,7 +55,7 @@ function showResult(){
 }
 
 function canInsertDecimal(target){
-    if((target.id == ".") && ((x.includes(".")) && y =="") ||  y.includes(".")){
+    if((target.id == ".") && ((x.includes(".") && y == "") ||  y.includes("."))){
         return false;
     }
     else{
