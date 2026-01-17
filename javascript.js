@@ -1,3 +1,10 @@
+/* if u are revising heres what to fix 
+    add keyboard support
+    add support for minus and exponent form, since
+    both include syntax - and + that break code.
+
+*/
+
 let text = "";
 let x = "";
 let y = "";
