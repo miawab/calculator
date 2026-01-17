@@ -20,14 +20,18 @@ const topBtns = document.querySelector("#topBtns");
 //functions
 
 function displayContent(text){
-    if(text.length > 14){
-        let i = text.length - 14;
-        content.textContent = text.slice(i, 14+i);
+    if(text.length > 10){
+        let i = text.length - 10;
+        content.textContent = text.slice(i, 10+i);
     }
     else{content.textContent = text;}
 }
 
 function calculate(op,x,y){
+    if(y==0 && op =="÷"){
+        content.textContent = text
+        return x;
+    }
     switch (op) {
         case "x":
             return x*y;
@@ -48,7 +52,7 @@ function calculate(op,x,y){
 
 function showResult(){
     x = Number(calculate(op,x,y))
-    x = (x>999999999999?`${(x.toPrecision(9))}`:`${Number(x.toPrecision(12))}`)
+    x = (x>9999999?`${(x.toPrecision(4))}`:`${Number(x.toPrecision(7))}`)
     y = "";
     text = `${x}`;
     displayContent(text);
@@ -107,6 +111,12 @@ topBtns.addEventListener("click",(e)=>{
         }  
         text = `${text.slice(0,text.length-1)}`;
         displayContent(text);
+        if(text=""){
+            x = "";
+            y = "";
+            op = ""
+        content.textContent = text;
+    }  
     }
     if(target.id == "AC"){
         text = "";
