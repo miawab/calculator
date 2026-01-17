@@ -25,14 +25,15 @@
 #screen{
     min-height: 80px;
     max-width: 250px;
+    min-width: 250px;
     margin: 10px 0 30px 0;
     background-color: white;
-}
-#contentBox{
-    max-width: 100%;
+    display: flex;
+    align-items: center;
 }
 #content{
     min-width: none;
+    font-size: 35px;
 }
 
 #panel{
