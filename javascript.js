@@ -1,5 +1,3 @@
-document.addEventListener("dblclick",(e)=>{e.preventDefault()}) //idk man check this
-
 let text = "";
 let x = "";
 let y = "";
@@ -37,16 +35,27 @@ function calculate(op,x,y){
             return x/y;
 
         case "+":
-            return x+y;
+            return Number(x) + Number(y);
     
         case "-":
             return x-y;
+            
+        default:
+            return x;
     }
 }
 
 mainBtns.addEventListener("click",(e)=>{
     let target = e.target;
     if(target.id == "x"|| target.id == "÷"|| target.id == "-"|| target.id == "+"){
+        if(["x","÷","-","+"].some(item=> textArray.includes(item))){
+            x = Number(calculate(op,x,y))
+            x = (x>999999999999?`${(x.toPrecision(9))}`:`${Number(x.toPrecision(12))}`)
+            y = "";
+            text = `${x}`;
+            textArray = text.split("");
+            displayContent(text); 
+        }
         op = target.id;
     }
     xArray = x.split("");
@@ -66,9 +75,9 @@ mainBtns.addEventListener("click",(e)=>{
         }
         displayContent(text);
     }
-    if(target.id == "=" && y != 0){
-        x = calculate(op,x,y)
-        x = `${Number(x.toPrecision(10))}`
+    if((target.id == "=" && y != "")){
+        x = Number(calculate(op,x,y))
+        x = (x>999999999999?`${(x.toPrecision(9))}`:`${Number(x.toPrecision(12))}`)
         y = "";
         text = `${x}`;
         textArray = text.split("");
@@ -81,31 +90,17 @@ topBtns.addEventListener("click",(e)=>{
     if(target.id == "back"){  
         xArray = x.split("");
         yArray = y.split("");
-        if((!(target.id == "." && (xArray.includes(".")) && y =="") && !(target.id == "." && yArray.includes(".")))){
-            if((textArray.includes(op))){
-                y = `${Math.floor(y/10)}`;
-                console.log("y")
-                console.log(y)
-            }
-            else{
-                x = `${Math.floor(x/10)}`;
-                console.log("x")
-                console.log(x)
-            }  
+        if((textArray.includes(op))){
+            y = y.slice(0, -1);
+            console.log("y")
+            console.log(y)
         }
         else{
-            if((textArray.includes(op))){
-                y = `${Math.floor(y/10)}`;
-                console.log("y")
-                console.log(y)
-            }
-            else{
-                x = `${Math.floor(x/10)}`;
-                console.log("x")
-                console.log(x)
-            } 
+            x = x.slice(0, -1);
+            console.log("x")
+            console.log(x)
         }  
-        t = `${text.slice(0,text.length-1)}`;
+        text = `${text.slice(0,text.length-1)}`;
         textArray = text.split("");
         displayContent(text);
     }
