@@ -6,8 +6,9 @@
 let text = "";
 let x = "";
 let y = "";
-let op;
+let op = null;
 let operators = ["x","÷","-","+"];
+let counter = 0;
 const Btns = document.querySelectorAll("button");
 
 Btns.forEach((btn)=>{
@@ -37,6 +38,12 @@ function calculate(op,x,y){
         content.textContent = text
         return x;
     }
+    if(y=="-"||y=="+"){
+        y="";
+    }
+    if(x=="-"||x=="+"){
+        x="";
+    }
     switch (op) {
         case "x":
             return x*y;
@@ -59,12 +66,14 @@ function showResult(){
     x = Number(calculate(op,x,y))
     x = (x>9999999?`${(x.toPrecision(4))}`:`${Number(x.toPrecision(7))}`)
     y = "";
+    counter = 0;
+    op = null;
     text = `${x}`;
     displayContent(text);
 }
 
 function canInsertDecimal(id){
-    if((id == "." || id == "Decimal") && ((x.includes(".") && y == "") ||  y.includes("."))){
+    if((id == ".") && ((x.includes(".") && y == "") ||  y.includes("."))){
         return false;
     }
     else{
@@ -93,6 +102,8 @@ function normaliseId(id){
 
 function canInsertKey(id){
     switch(id){
+        case "0":
+            return true;
         case "1":
             return true;
         case "2":
@@ -113,13 +124,9 @@ function canInsertKey(id){
             return true;
         case ".":
             return true;
-        case "Decimal":
-            return true;
         case "+":
             return true;
         case "-":
-            return true;
-        case "":
             return true;
         case "÷":
             return true;
@@ -130,24 +137,70 @@ function canInsertKey(id){
     }
 }
 
+function isOperator(x,y,id){
+    if(id=="+" || id=="-"){
+        if(x != ""){
+            if(op == null){
+                console.log("op equal null check")
+                return true;
+            }
+            else{
+                if(y!=""){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }
+        else{
+            return false;
+        }
+    }
+    else{
+        console.log("id check")
+        return true
+    }
+}
+
 //main 
 
 function mainBtnEvent(id){
     id = normaliseId(id);
     if(operators.some(item => item == id)){
-        if(operators.some(item=> text.includes(item))){
+        if(op=="-"||op=="+"){
+            if(text.includes(op)&& y!=""){
             showResult()
+            }
         }
-        op = id;
+        else if(text.includes(op)&& (operators.some(item => item == id))){
+            if((id=="x"||id=="÷")){
+                showResult()
+            }
+            if((id=="+"||id=="-")){
+                if(counter>0){
+                showResult()
+                }
+                counter++
+            }
+        }
+
+        if(isOperator(x,y,id)){
+            console.log("ye")
+            op = id;  
+        }
     }
     if(id != "mainBtns" && id != "=" && canInsertDecimal(id) && canInsertKey(id)){
         text += id;
-        if((text.includes(op) && id != op)){
-            y += id;
-            console.log("y")
-            console.log(y)
+        if((op !== null && (id !== op || !isOperator(x,y,id)))){
+            if(counter>0 || (id!="-" && id !="+")){
+                y += id;
+                console.log("y")
+                console.log(y)
+            }
+            counter++
         }
-        else if(id!= op){
+        else if(id !== op){
             x += id
             console.log("x")
             console.log(x)
@@ -163,21 +216,27 @@ function topBtnEvent(id){
     id = normaliseId(id);
     if(id == "back"){  
         if((text.includes(op))){
+            if(y==""){
+                op = null;
+                counter = 0;
+            }
             y = y.slice(0, -1);
             console.log("y")
-            console.log(y)
+            console.log(y);
         }
         else{
             x = x.slice(0, -1);
             console.log("x")
             console.log(x)
-        }  
+        } 
+        console.log(op)
         text = `${text.slice(0,text.length-1)}`;
         displayContent(text);
         if(text==""){
             x = "";
             y = "";
             op = null;
+            counter = 0;
         content.textContent = text;
     }  
     }
@@ -186,6 +245,7 @@ function topBtnEvent(id){
         x = "";
         y = "";
         op = null;
+        counter = 0;
         content.textContent = text;
     }
 }
@@ -206,15 +266,12 @@ topBtns.addEventListener("click",(e)=>{
 
 document.addEventListener("keydown",(e)=>{
     let id = e.key;
-    console.log(id)
     mainBtnEvent(id);
-    e.preventDefault()
 });
 
 document.addEventListener("keydown",(e)=>{
     let id = e.key;
     topBtnEvent(id);
-    e.preventDefault()
 });
 
 
