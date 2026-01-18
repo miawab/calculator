@@ -1,8 +1,3 @@
-/* if u are revising heres what to fix 
-    add support for minus and exponent form, since
-    both include syntax - and + that break code.
-*/
-
 let text = "";
 let x = "";
 let y = "";
@@ -141,7 +136,6 @@ function isOperator(x,y,id){
     if(id=="+" || id=="-"){
         if(x != ""){
             if(op == null){
-                console.log("op equal null check")
                 return true;
             }
             else{
@@ -158,7 +152,6 @@ function isOperator(x,y,id){
         }
     }
     else{
-        console.log("id check")
         return true
     }
 }
@@ -186,7 +179,6 @@ function mainBtnEvent(id){
         }
 
         if(isOperator(x,y,id)){
-            console.log("ye")
             op = id;  
         }
     }
@@ -195,15 +187,11 @@ function mainBtnEvent(id){
         if((op !== null && (id !== op || !isOperator(x,y,id)))){
             if(counter>0 || (id!="-" && id !="+")){
                 y += id;
-                console.log("y")
-                console.log(y)
             }
             counter++
         }
         else if(id !== op){
             x += id
-            console.log("x")
-            console.log(x)
         }
         displayContent(text);
     }
@@ -221,15 +209,10 @@ function topBtnEvent(id){
                 counter = 0;
             }
             y = y.slice(0, -1);
-            console.log("y")
-            console.log(y);
         }
         else{
             x = x.slice(0, -1);
-            console.log("x")
-            console.log(x)
         } 
-        console.log(op)
         text = `${text.slice(0,text.length-1)}`;
         displayContent(text);
         if(text==""){
