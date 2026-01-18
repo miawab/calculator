@@ -3,7 +3,7 @@ let x = "";
 let y = "";
 let op = null;
 let operators = ["x","÷","-","+"];
-let counter = 0;
+let delayBy1Counter = 0;
 const Btns = document.querySelectorAll("button");
 
 Btns.forEach((btn)=>{
@@ -61,7 +61,7 @@ function showResult(){
     x = Number(calculate(op,x,y))
     x = (x>9999999?`${(x.toPrecision(4))}`:`${Number(x.toPrecision(7))}`)
     y = "";
-    counter = 0;
+    delayBy1Counter = 0;
     op = null;
     text = `${x}`;
     displayContent(text);
@@ -171,10 +171,10 @@ function mainBtnEvent(id){
                 showResult()
             }
             if((id=="+"||id=="-")){
-                if(counter>0){
+                if(delayBy1Counter>0){
                 showResult()
                 }
-                counter++
+                delayBy1Counter++
             }
         }
 
@@ -185,10 +185,10 @@ function mainBtnEvent(id){
     if(id != "mainBtns" && id != "=" && canInsertDecimal(id) && canInsertKey(id)){
         text += id;
         if((op !== null && (id !== op || !isOperator(x,y,id)))){
-            if(counter>0 || (id!="-" && id !="+")){
+            if(delayBy1Counter>0 || (id!="-" && id !="+")){
                 y += id;
             }
-            counter++
+            delayBy1Counter++
         }
         else if(id !== op){
             x += id
@@ -206,7 +206,7 @@ function topBtnEvent(id){
         if((text.includes(op))){
             if(y==""){
                 op = null;
-                counter = 0;
+                delayBy1Counter = 0;
             }
             y = y.slice(0, -1);
         }
@@ -219,7 +219,7 @@ function topBtnEvent(id){
             x = "";
             y = "";
             op = null;
-            counter = 0;
+            delayBy1Counter = 0;
         content.textContent = text;
     }  
     }
@@ -228,7 +228,7 @@ function topBtnEvent(id){
         x = "";
         y = "";
         op = null;
-        counter = 0;
+        delayBy1Counter = 0;
         content.textContent = text;
     }
 }
@@ -237,25 +237,16 @@ function topBtnEvent(id){
 mainBtns.addEventListener("click",(e)=>{
     let target = e.target;
     let id = target.id;
-    mainBtnEvent(id)
-});
-
-
-topBtns.addEventListener("click",(e)=>{
-    let target = e.target;
-    let id = target.id;
-    topBtnEvent(id)
+    mainBtnEvent(id);
+    topBtnEvent(id);
 });
 
 document.addEventListener("keydown",(e)=>{
     let id = e.key;
     mainBtnEvent(id);
-});
-
-document.addEventListener("keydown",(e)=>{
-    let id = e.key;
     topBtnEvent(id);
 });
+
 
 
 
