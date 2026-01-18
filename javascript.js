@@ -1,8 +1,6 @@
 /* if u are revising heres what to fix 
-    add keyboard support
     add support for minus and exponent form, since
     both include syntax - and + that break code.
-
 */
 
 let text = "";
@@ -65,8 +63,8 @@ function showResult(){
     displayContent(text);
 }
 
-function canInsertDecimal(target){
-    if((target.id == ".") && ((x.includes(".") && y == "") ||  y.includes("."))){
+function canInsertDecimal(id){
+    if((id == "." || id == "Decimal") && ((x.includes(".") && y == "") ||  y.includes("."))){
         return false;
     }
     else{
@@ -74,38 +72,96 @@ function canInsertDecimal(target){
     }
 }
 
-// main
+function normaliseId(id){
+    if(id == "/"){
+        id = "÷";
+    }
+    if(id == "*"){
+        id = "x";
+    }
+    if(id == "Enter"){
+        id = "=";
+    }
+    if(id == "Decimal"){
+        id = ".";
+    }
+    if(id == "Backspace"){
+        id ="back";
+    }
+    return id;
+}
 
-mainBtns.addEventListener("click",(e)=>{
-    let target = e.target;
-    if(operators.some(item => item == target.id)){
+function canInsertKey(id){
+    switch(id){
+        case "1":
+            return true;
+        case "2":
+            return true;
+        case "3":
+            return true;
+        case "4":
+            return true;
+        case "5":
+            return true;
+        case "6":
+            return true;
+        case "7":
+            return true;
+        case "8":
+            return true;
+        case "9":
+            return true;
+        case ".":
+            return true;
+        case "Decimal":
+            return true;
+        case "+":
+            return true;
+        case "-":
+            return true;
+        case "":
+            return true;
+        case "÷":
+            return true;
+        case "x":
+            return true;  
+        default:
+            return false;
+    }
+}
+
+//main 
+
+function mainBtnEvent(id){
+    id = normaliseId(id);
+    if(operators.some(item => item == id)){
         if(operators.some(item=> text.includes(item))){
             showResult()
         }
-        op = target.id;
+        op = id;
     }
-    if(target.id != "mainBtns" && target.id != "=" && canInsertDecimal(target)){
-        text += target.id;
-        if((text.includes(op) && target.id != op)){
-            y += target.id;
+    if(id != "mainBtns" && id != "=" && canInsertDecimal(id) && canInsertKey(id)){
+        text += id;
+        if((text.includes(op) && id != op)){
+            y += id;
             console.log("y")
             console.log(y)
         }
-        else if(target.id!= op){
-            x += target.id
+        else if(id!= op){
+            x += id
             console.log("x")
             console.log(x)
         }
         displayContent(text);
     }
-    if((target.id == "=" && y != "")){
+    if((id == "=" && y != "")){
         showResult()
     }
-});
+}
 
-topBtns.addEventListener("click",(e)=>{
-    let target = e.target;
-    if(target.id == "back"){  
+function topBtnEvent(id){
+    id = normaliseId(id);
+    if(id == "back"){  
         if((text.includes(op))){
             y = y.slice(0, -1);
             console.log("y")
@@ -118,20 +174,47 @@ topBtns.addEventListener("click",(e)=>{
         }  
         text = `${text.slice(0,text.length-1)}`;
         displayContent(text);
-        if(text=""){
+        if(text==""){
             x = "";
             y = "";
-            op = ""
+            op = null;
         content.textContent = text;
     }  
     }
-    if(target.id == "AC"){
+    if(id == "AC"){
         text = "";
         x = "";
         y = "";
-        op = ""
+        op = null;
         content.textContent = text;
     }
+}
+
+// events
+mainBtns.addEventListener("click",(e)=>{
+    let target = e.target;
+    let id = target.id;
+    mainBtnEvent(id)
+});
+
+
+topBtns.addEventListener("click",(e)=>{
+    let target = e.target;
+    let id = target.id;
+    topBtnEvent(id)
+});
+
+document.addEventListener("keydown",(e)=>{
+    let id = e.key;
+    console.log(id)
+    mainBtnEvent(id);
+    e.preventDefault()
+});
+
+document.addEventListener("keydown",(e)=>{
+    let id = e.key;
+    topBtnEvent(id);
+    e.preventDefault()
 });
 
 

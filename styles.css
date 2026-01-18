@@ -89,3 +89,7 @@ button{
     background-color: #077633;
     color: #f5faf7;
 }
+
+button:focus {
+    outline: none;
+}
