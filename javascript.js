@@ -238,12 +238,19 @@ mainBtns.addEventListener("click",(e)=>{
     let target = e.target;
     let id = target.id;
     mainBtnEvent(id);
+});
+topBtns.addEventListener("click",(e)=>{
+    let target = e.target;
+    let id = target.id;
     topBtnEvent(id);
 });
 
 document.addEventListener("keydown",(e)=>{
     let id = e.key;
     mainBtnEvent(id);
+});
+document.addEventListener("keydown",(e)=>{
+    let id = e.key;
     topBtnEvent(id);
 });
 
