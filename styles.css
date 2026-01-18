@@ -35,7 +35,7 @@ body{
     min-height: 80px;
     max-width: 250px;
     min-width: 250px;
-    margin: 10px 0 30px 0;
+    margin: 10px 0;
     background-color: #000000;
     display: flex;
     align-items: center;
@@ -81,6 +81,10 @@ button{
     color:#949494;
 }
 
+#topBtns{
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
 .operator{
     background-color: #077633;
     color: #f5faf7;
